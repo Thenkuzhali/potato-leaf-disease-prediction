@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Classifier</title>
+   <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://dyvdnmp0itmzz.cloudfront.net/wp-content/uploads/2021/03/09124724/Image-1-min-scaled.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label {
+            cursor: pointer;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #uploaded-image {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plant Disease Classifier</h1>
+        <form id="predict-form" enctype="multipart/form-data">
+            <label for="image-selector">Select an image:</label>
+            <input type="file" accept="image/*" id="image-selector" />
+            <button type="button" onclick="predict()">Predict</button>
+        </form>
+        <div id="result"></div>
+        <img id="uploaded-image" src="" alt="Uploaded Image" style="display: none;">
+    </div>
+
+    <script>
+        async function predict() {
+            const formData = new FormData();
+            const imageFile = document.getElementById('image-selector').files[0];
+            formData.append('file', imageFile);
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = `Predicted class: ${result.class}`;
+        }
+    </script>
+</body>
+</html>
